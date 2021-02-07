@@ -11,7 +11,7 @@
     
 `pip install opencv-python`
 
-## [이미지 파일 읽고 쓰기](EX1.py)
+## [이미지 파일 읽고 쓰기](EXAMPLE/EX1.py)
 ### 이미지 읽기
 `변수 = cv2.imread(이름, 몇 장)`
 ### 이미지 저장
@@ -19,7 +19,7 @@
 ### 이미지 보여주기
 `cv2.imshow(이미지 이름, 변수명)`
 
-## [카메라 영상 처리](EX2.py)
+## [카메라 영상 처리](EXAMPLE/EX2.py)
 - OpenCV에서 카메라(웹캠)로부터 영상을 전달받아 처리하기 위해서는 VideoCapture 클래스를 사용한다. 
 
 - VideoCapture 클래스의 인스턴스를 생성할 때, 컴퓨터에 카메라가 여러 개 있을 수 있으므로, 어떤 카메라를 사용할 지를 카메라 아이디로 전달하는데, 일반적으로 0 을 쓰면 첫번째 카메라(디폴트 카메라)를 사용하게 된다. 
@@ -37,7 +37,7 @@
 - 만약 카메라가 아니라 동영상 파일에서 영상 데이타를 가져오기 위해서는 VideoCapture 인스턴스를 생성할 때 카메라 Device Id 대신 동영상 파일명을 지정하면 된다. 
 예를 들어, `cap = cv2.VideoCapture("test.mp4")` 와 같이 사용한다.
 
-## [카메라 영상 저장하기](EX3.py)
+## [카메라 영상 저장하기](EXAMPLE/EX3.py)
 - OpenCV에서 카메라(웹캠)로부터 전달받은 영상을 저장하기 위해서는 VideoWriter 클래스를 사용한다. 
 - VideoWriter 클래스의 인스턴스를 생성할 때, 영상 저장과 관련된 몇 개의 파라미터를 전달해야 하는데, **첫번째로 영상을 저장할 파일명을 지정하고, 두번째로 영상을 어떤 포맷으로 저장할 지를 표시하는 fourcc ID를 지정한다.** 
 - fourcc는 four character code의 약자로서, 비디오 코덱(Codec)을 지정하는 4 바이트 코드이다. 
@@ -47,10 +47,31 @@
 
 - 실제 프레임 저장은 VideoWriter 클래스의 write() 메서드를 사용하며, 저장이 모두 끝나면 release() 메서드를 호출하여 파일을 닫아 준다.
 
-## [OpenCV와 Matplotlib 활용](EX4.py)
+## [OpenCV와 Matplotlib 활용](EXAMPLE/EX4.py)
 - Matplotlib는 파이썬에서 데이터를 차트나 플롯(Plot)으로 그려주는 2D 라이브러리 패키지이다.
 - OpenCV에서 img = cv2.imread()를 통해 이미지를 읽어 들인 후, 이어 Matplotlib의 pyplot.imshow(img)로 호출하면 이미지를 pyplot으로 그릴 준비를 하게 된다.
 - pyplot.show() 를 호출하면 이미지를 화면에 출력하게 된다. 
 - **OpenCV 의 imread()는 `BGR` 포맷으로 이미지를 읽어들이고, pyplot은 `RGB` 포맷을 사용하므로 원래의 이미지 색을 표현하기 위해서는 cv2.cvtColor() 를 사용하여 `BGR` 포맷을 `RGB` 포맷으로 변환해 주는 작업이 필요하다.**
 EX) `img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)`
 - matplotlib에서 생성한 윈도우에서는 이미지를 파일로 저장하거나 이미지 좌표를 체크할 수도 있으며, 이미지를 확대 축소하는 등의 기능들을 사용할 수도 있다.
+
+## [대칭](EXAMPLE/EX5.py)
+- 영상이나 이미지를 대칭시켜 띄울 수 있다. 상하 또는 좌우방향으로 대칭할 수 있다.
+- `cv2.flip(원본 이미지, 대칭 방법)`
+- 0일 경우, 상하방향으로 대칭
+- 1일 경우, 좌우방향으로 대칭
+
+## [회전](EXAMPLE/EX6.py)
+- 영상이나 이미지를 회전시켜 띄울 수 있다. 90°, 45°, -45° 등 다양한 각도로 회전이 가능하다.
+### `height, width, channel = src.shape`
+- 높이, 너비, 채널 값 저장
+- **높이**와 **너비**를 회전 중심점으로 설정함
+### `matrix = cv2.getRotationMatrix2D((width/2, height/2), 90, 1)`
+- cv2.getRotationMatrix2D((중심점 X좌표, 중심점 Y좌표), 각도, 스케일)을 설정합니다.
+- 중심점은 Tuple형태로 사용하며 회전할 기준점을 설정
+- 각도는 회전할 각도를 설정
+- 스케일은 이미지의 확대 비율을 설정
+### `dst = cv2.warpAffine(src, matrix, (width, height))`
+- cv2.warpAffine(원본 이미지, 배열, (결과 이미지 너비, 결과 이미지 높이))
+- 결과 이미지의 너비와 높이로 크기가 선언되며 배열에 따라 이미지가 회전
+- **matrix를 numpy형식으로 선언하여 warpAffine을 적용하여 변환가능**
