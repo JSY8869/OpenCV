@@ -2,9 +2,7 @@ import cv2
 
 src = cv2.imread("JSY8869/EXAMPLE/test.png", cv2.IMREAD_COLOR)
 
-height, width, channel = src.shape
-matrix = cv2.getRotationMatrix2D((width/2, height/2), 90, 1)
-dst = cv2.warpAffine(src, matrix, (width, height))
+dst = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
 
 cv2.imshow("src", src)
 cv2.imshow("dst", dst)
